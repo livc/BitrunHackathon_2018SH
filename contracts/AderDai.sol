@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.4.24;
 
 /**
  * @title AderDai Kovan 
@@ -11,22 +11,26 @@ pragma solidity ^0.4.25;
 import "./DSToken.sol";
 
 contract AderDai is DSToken {
+    using SafeMath for *;
+
     address constant private testAccount = 0x3fa17c1f1a0ae2db269f0b572ca44b15bc83929a;
 //==============================================================================
 //     _ _  _  |`. _     _ _ |_ | _  _  .
-//    (_(_)| |~|~|(_||_|| (_||_)|(/__\  .  (game settings)
+//    (_(_)| |~|~|(_||_|| (_||_)|(/__\  .  (bid settings)
 //=================_|===========================================================
     string constant public name = "AderDai";
     string constant public symbol = "AD";
     uint256 constant private initPrice_ = 100000000000000000000;
     uint256 constant private bidRate_ = 1100000000000000000;
+    uint256 constant private interestPeriod_ = 31 days;
+    uint256 constant private returnPeriod_ = 12;
 //****************
 // BIDDER DATA 
 //****************
     mapping (address => uint256) public bIDxAddr_;          // (addr => bID) returns bidder id by address
     mapping (uint256 => AderDaidatasets.Bidder) public bidder_; // (bID => data) returns bidder info by bidder id
 //****************
-// GAME DATA 
+// BIDDING DATA 
 //****************
     uint256 public bidCount_;
     uint256 public bidPrice_;
@@ -70,9 +74,9 @@ contract AderDai is DSToken {
 //    |_)|_||_)||(_  ~|~|_|| |(_ | |(_)| |_\  .  (use these to interact with contract)
 //====|=========================================================================
     /**
-     * @dev bid anyway
+     * @dev bid with url
      */
-    function()
+    function uBid(string _url)
         isHuman()
         priceLimited()
         public
@@ -83,26 +87,50 @@ contract AderDai is DSToken {
             
         // fetch bidder id
         uint256 _bID = bIDxAddr_[msg.sender];
+
+        // update url
+        bidder_[_bID].url = _url;
         
-        // buy core 
-        buyCore(_bID, _eventData_);
+        // bid core 
+        bidCore(_bID, _eventData_);
     }
 
     /**
-     * @dev logic runs whenever a buy order is executed. 
+     * @dev return with interest
      */
-    function buyCore(uint256 _bID, AderDaidatasets.EventReturns memory _eventData_)
-        private
+    function iReturn(uint256 _bID)
+        public
+        payable
     {
-        // transfer Dai to testAccount
-        transfer(testAccount, msg.value);
-        // update bidding price
-        bidPrice_ = calcBidPrice();
+        require(now.sub(bidder_[_bID].date) > interestPeriod_, "date does not meets");
+
+        bidder_[_bID].addr.transfer(bidder_[_bID].value.div(returnPeriod_));
+    }
+
+    /**
+     * @dev logic runs whenever a bid order is executed. 
+     */
+    function bidCore(uint256 _bID, AderDaidatasets.EventReturns memory _eventData_)
+        private
+        returns (AderDaidatasets.EventReturns)
+    {
+        // setting bidder data
         bidder_[_bID].owner = true;
+        bidder_[_bID].date = now;
+        bidder_[_bID].value = msg.value;
         // if bidder more than 1, set bID-1 to false
         if (_bID > 1) {
             bidder_[_bID-1].owner = false;
         }
+        // transfer Dai to testAccount
+        transfer(testAccount, msg.value);
+        // update bidding price
+        bidPrice_ = calcBidPrice();
+
+        // build event data
+        _eventData_.compressedData = _eventData_.compressedData + (now * 1000000000000000000);
+        _eventData_.compressedIDs = _eventData_.compressedIDs + _bID;
+        _eventData_.ownerAddr = msg.sender;
     }
 
     /**
@@ -144,6 +172,52 @@ contract AderDai is DSToken {
         _eventData_.compressedData = _eventData_.compressedData + 1;
         return (_eventData_);
     }
+
+    /**
+     * @dev returns bidder id based on address. 
+     * @param _addr address of the bidder you want to lookup 
+     * @return bidder ID
+     */
+    function getBidderIdByAddress(address _addr)
+        public 
+        view 
+        returns(uint256)
+    {
+        uint256 _bID = bIDxAddr_[_addr];
+
+        return
+        (
+            _bID,                               //0
+        );
+    }
+
+    /**
+     * @dev returns bidder info based on id. 
+     * @param _bID id of the bidder you want to lookup 
+     * @return bidder ID 
+     * @return bidder address
+     * @return date bided
+     * @return value transferred
+     * @return bid url
+     * @return general vault 
+	 * @return ad owned
+     */
+    function getBidderInfoById(uint256 _bID)
+        public 
+        view 
+        returns(uint256, address, uint256, uint256, string, uint256, bool)
+    {
+        return
+        (
+            _bID,                               //0
+            bidder_[_bID].addr,                 //1
+            bidder_[_bID].date,                 //2
+            bidder_[_bID].value,                //3
+            bidder_[_bID].url,                  //4
+            bidder_[_bID].gen,                  //5
+            bidder_[_bID].owner                 //6
+        );
+    }
 }
 
 /**
@@ -153,13 +227,16 @@ library AderDaidatasets {
     struct Bidder {
         uint256 id;   // bidder id
         address addr; // bidder address
+        uint256 date; // bid date
+        uint256 value; // bid value
+        string url; // bid url
         uint256 gen;    // general vault
         bool owner;   // ad owner
     }
     struct EventReturns {
         uint256 compressedData;
         uint256 compressedIDs;
-        address winnerAddr;         // winner address
+        address ownerAddr;         // owner address
         uint256 genAmount;          // amount distributed to gen
     }
 }
