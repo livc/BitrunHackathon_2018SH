@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Pete's Pet Shop</title>
+    <title>Ad's auction</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,46 +17,167 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+
+    
   </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Pete's Pet Shop</h1>
-          <hr/>
-          <br/>
-        </div>
-      </div>
+  <body class="container" style="padding-top: 3%;">
+
+      <h2><a href="#">Ad's auction</a></h2>
+      <h4>use dai no one die</h4>
+
 
       <div id="petsRow" class="row">
         <!-- PETS LOAD HERE -->
       </div>
-    </div>
 
-    <div id="petTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="panel panel-default panel-pet">
-          <div class="panel-heading">
-            <h3 class="panel-title">Scrappy</h3>
+
+
+
+      <div class="row">
+          <div class="column column-50">
+              <div class="panel panel-default panel-pet">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">AD content</h3>
+                  </div>
+                  <div class="panel-body">
+        
+                      <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
+        
+                    <br/><br/>
+        
+                  </div>
+                </div>
+              </div>
+
+            <div class="column column-50">
+                <div class="panel panel-default panel-pet">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">rule</h3>
+                    </div>
+                    <div class="panel-body">
+                      
+                      <pre><code>
+                          1.
+                          2. 
+                      </code></pre>
+                      <br/><br/>
+          
+                    </div>
+                  </div>
+  
+            </div>
+  
+  
+            
           </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Breed</strong>: <span class="pet-breed">Golden Retriever</span><br/>
-            <strong>Age</strong>: <span class="pet-age">3</span><br/>
-            <strong>Location</strong>: <span class="pet-location">Warren, MI</span><br/><br/>
-            <button class="btn btn-default btn-adopt" type="button" data-id="0">Adopt</button>
-          </div>
+
+
+
+
+
+    <div class="row">
+        <div class="column">
+          <label>Last Bid</label>
+          <blockquote><p><em id="beneficiary">Loading..</em><br /><br /></p></blockquote>
+        </div>
+
+
+        <div class="column">
+          <label>Timeleft</label>
+          <blockquote><p><em id="timeleft">Loading..</em><br />seconds</p></blockquote>
+        </div>
+
+
+
+        <!-- <div class="column">
+          <label>Your Account<label>
+          <blockquote><p><em id="accountAddress">Loading..</em><br /><br /></p></blockquote>
+        </div>
+        <div class="column">
+          <label>Balance</label>
+          <blockquote><p><em id="accountBalance">Loading..</em><br />Dai</p></blockquote>
+        </div> -->
+
+
+
+      </div>
+  
+
+
+
+      <hr />
+  
+      <div class="row">
+        <div class="column column-33">
+          <label>Ad url</label>
+          <input type="text" id="adurl" placeholder="http://">
+
+        </div>
+
+
+        <div class="column column-25">
+          <label>You Can Bid </label>
+          <input type="number" id="bidAmount" placeholder="28300 Dai"  readonly="readonly">
+        </div>
+
+        <div class="column column-25">
+          <label><br /></label>
+          <button id="makeBid">Bid</button>
         </div>
       </div>
-    </div>
+  
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+      <hr />
+  
+      <!-- <button id="endAuction" disabled="disabled">End Auction</button> -->
+  
+      <br /><br />
+  
+      <div id="response"></div>
+
+
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script type="text/javascript" src="ethereumjs-testrpc.js"></script>
+    <script type="text/javascript" src="ethjs.js"></script>
+    <script type="text/javascript">
+      // var eth = new Eth(TestRPC.provider());
+      var el = function(id){ return document.querySelector(id); };
+
+      
+
+    
+
+
+                el('#makeBid').addEventListener('click', function(){
+
+                        var a=  el('#adurl').value
+                        console.log(a)
+                        document.getElementsByTagName('img')[0].setAttribute('src',a)
+                        
+                });
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
   </body>
 </html>
