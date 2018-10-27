@@ -24,6 +24,7 @@ contract AderDai is DSToken {
     uint256 constant private bidRate_ = 1100000000000000000;
     uint256 constant private interestPeriod_ = 31 days;
     uint256 constant private returnPeriod_ = 12;
+    uint256 constant private teamInterest_ = 0.2;
 //****************
 // BIDDER DATA 
 //****************
@@ -69,6 +70,14 @@ contract AderDai is DSToken {
         _;
     }
 
+    /**
+     * @dev sets the per date period to 31 days
+     */
+    modifier dateLimited(uint256 _bID) {
+        require(now.sub(bidder_[_bID].date) > interestPeriod_, "date does not meets");
+        _;
+    }
+
 //==============================================================================
 //     _    |_ |. _   |`    _  __|_. _  _  _  .
 //    |_)|_||_)||(_  ~|~|_|| |(_ | |(_)| |_\  .  (use these to interact with contract)
@@ -99,13 +108,22 @@ contract AderDai is DSToken {
      * @dev return with interest
      */
     function iReturn(uint256 _bID)
+        dateLimited(_bID)
         public
         payable
-    {
-        require(now.sub(bidder_[_bID].date) > interestPeriod_, "date does not meets");
+    {        
+        // divide to 12 period
+        uint256 _divide = bidder_[_bID].frzValue.div(returnPeriod_);
 
-        bidder_[_bID].addr.transfer(bidder_[_bID].value.div(returnPeriod_));
+        if ( bidder_[_bID].frzValue >= _divide ) {
+            bidder_[_bID].addr.transfer(_divide);
+            bidder_[_bID].frzValue.sub(_divide);
+            // reset date
+            bidder_[_bID].date = now;
+        }
     }
+
+
 
     /**
      * @dev logic runs whenever a bid order is executed. 
@@ -117,7 +135,7 @@ contract AderDai is DSToken {
         // setting bidder data
         bidder_[_bID].owner = true;
         bidder_[_bID].date = now;
-        bidder_[_bID].value = msg.value;
+        bidder_[_bID].frzValue = msg.value;
         // if bidder more than 1, set bID-1 to false
         if (_bID > 1) {
             bidder_[_bID-1].owner = false;
@@ -174,6 +192,21 @@ contract AderDai is DSToken {
     }
 
     /**
+     * @dev returns bidder sum. 
+     * @return bidder sum
+     */
+    function getTotalBidder()
+        public 
+        view 
+        returns(uint256)
+    {
+        return
+        (
+            bidCount_                               //0
+        );
+    }
+
+    /**
      * @dev returns bidder id based on address. 
      * @param _addr address of the bidder you want to lookup 
      * @return bidder ID
@@ -187,7 +220,7 @@ contract AderDai is DSToken {
 
         return
         (
-            _bID,                               //0
+            _bID                               //0
         );
     }
 
@@ -212,7 +245,7 @@ contract AderDai is DSToken {
             _bID,                               //0
             bidder_[_bID].addr,                 //1
             bidder_[_bID].date,                 //2
-            bidder_[_bID].value,                //3
+            bidder_[_bID].frzValue,             //3
             bidder_[_bID].url,                  //4
             bidder_[_bID].gen,                  //5
             bidder_[_bID].owner                 //6
@@ -228,7 +261,7 @@ library AderDaidatasets {
         uint256 id;   // bidder id
         address addr; // bidder address
         uint256 date; // bid date
-        uint256 value; // bid value
+        uint256 frzValue; // bid frzee value
         string url; // bid url
         uint256 gen;    // general vault
         bool owner;   // ad owner
