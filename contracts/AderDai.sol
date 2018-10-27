@@ -14,6 +14,7 @@ contract AderDai is DSToken {
     using SafeMath for *;
 
     address constant private testAccount = 0x3fa17c1f1a0ae2db269f0b572ca44b15bc83929a;
+    address constant private teamAccount = 0x89428305344Fe5De0801EDF41C5632C1e0FA231C;
 //==============================================================================
 //     _ _  _  |`. _     _ _ |_ | _  _  .
 //    (_(_)| |~|~|(_||_|| (_||_)|(/__\  .  (bid settings)
@@ -24,7 +25,7 @@ contract AderDai is DSToken {
     uint256 constant private bidRate_ = 1100000000000000000;
     uint256 constant private interestPeriod_ = 31 days;
     uint256 constant private returnPeriod_ = 12;
-    uint256 constant private teamInterest_ = 0.2;
+    uint256 constant private teamInterest_ = uint256(20 / 100);
 //****************
 // BIDDER DATA 
 //****************
@@ -123,7 +124,18 @@ contract AderDai is DSToken {
         }
     }
 
-
+    /**
+     * @dev give interest to team
+     */
+    function iTeam(uint256 _bID)
+        public
+        payable
+    {        
+        // calculate interest
+        uint256 _interest = ((bidder_[_bID].frzValue).div(1 + teamInterest_)).mul(teamInterest_);
+        // give it to team
+        teamAccount.transfer(_interest);
+    }
 
     /**
      * @dev logic runs whenever a bid order is executed. 
@@ -136,9 +148,12 @@ contract AderDai is DSToken {
         bidder_[_bID].owner = true;
         bidder_[_bID].date = now;
         bidder_[_bID].frzValue = msg.value;
-        // if bidder more than 1, set bID-1 to false
+        // if bidder more than 1, set bID-1 to false and do gen share.
         if (_bID > 1) {
             bidder_[_bID-1].owner = false;
+            bidder_[_bID-1].frzValue.add(msg.value);
+            bidder_[_bID-1].gen.add(msg.value);
+            bidder_[_bID].frzValue.sub(msg.value);
         }
         // transfer Dai to testAccount
         transfer(testAccount, msg.value);
