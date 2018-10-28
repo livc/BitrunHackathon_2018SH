@@ -429,6 +429,23 @@ contract DSToken is DSTokenBase(0), DSStop {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 contract AderDai is DSToken {
     using SafeMath for *;
 
@@ -686,6 +703,9 @@ contract AderDai is DSToken {
         );
     }
 }
+
+
+
 
 /**
 * @title AderDai datasets
