@@ -1,31 +1,31 @@
 [{
     "id": 0,
-    "bidder": "Frieda",
-    "picture": "images/scottish-terrier.jpeg",
+    "bidder": "Lily",
+    "picture": "images/1.jpeg",
     "date": 9.28,
     "bidValue": 666,
     "location": "Lisco, Alabama"
   },
   {
     "id": 0,
-    "bidder": "Frieda",
-    "picture": "images/scottish-terrier.jpeg",
+    "bidder": "John",
+    "picture": "images/2.jpeg",
     "date": 9.28,
     "bidValue": 666,
     "location": "Lisco, Alabama"
   },
   {
     "id": 0,
-    "bidder": "Frieda",
-    "picture": "images/scottish-terrier.jpeg",
+    "bidder": "AKA GOODBOY",
+    "picture": "images/3.jpeg",
     "date": 9.28,
     "bidValue": 666,
     "location": "Lisco, Alabama"
   },
   {
     "id": 0,
-    "bidder": "Frieda",
-    "picture": "images/scottish-terrier.jpeg",
+    "bidder": "Linda",
+    "picture": "images/4.jpeg",
     "date": 9.28,
     "bidValue": 666,
     "location": "Lisco, Alabama"
