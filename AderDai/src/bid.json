@@ -1,34 +1,34 @@
 [{
     "id": 0,
     "bidder": "Lily",
+    "account": "",
     "picture": "images/1.jpeg",
-    "date": 9.28,
-    "bidValue": 666,
-    "location": "Lisco, Alabama"
+    "bidPrice": 666,
+    "location": "Shanghai, China"
   },
   {
-    "id": 0,
-    "bidder": "John",
-    "picture": "images/2.jpeg",
-    "date": 9.28,
-    "bidValue": 666,
-    "location": "Lisco, Alabama"
-  },
-  {
-    "id": 0,
-    "bidder": "AKA GOODBOY",
-    "picture": "images/3.jpeg",
-    "date": 9.28,
-    "bidValue": 666,
-    "location": "Lisco, Alabama"
-  },
-  {
-    "id": 0,
+    "id": 1,
     "bidder": "Linda",
-    "picture": "images/4.jpeg",
-    "date": 9.28,
-    "bidValue": 666,
-    "location": "Lisco, Alabama"
+    "account": "",
+    "picture": "images/3.jpeg",
+    "bidPrice": 666,
+    "location": "Zhejiang, JiangSu"
+  },
+  {
+    "id": 2,
+    "bidder": "Lily",
+    "account": "",
+    "picture": "images/3.jpeg",
+    "bidPrice": 666,
+    "location": "BeiJing, China"
+  },
+  {
+    "id": 3,
+    "bidder": "Lily",
+    "account": "",
+    "picture": "images/3.jpeg",
+    "bidPrice": 666,
+    "location": "ShenZhen, China"
   }
   
 ]
