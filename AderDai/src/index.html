@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +9,7 @@
     <title>AderBid</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,7 +23,7 @@
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-push-2">
           <h2 class="text-center"><a href="#">Ad's auction</a></h2>
-      <h4 class="text-center">use dai no one die</h4>
+      <!-- <h4 class="text-center">have a try using Dai</h4> -->
           <hr/>
           <br/>
         </div>
@@ -42,14 +43,34 @@
           <div class="panel-body">
             <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
             <br/><br/>
-            <strong>Bid-Value</strong>: <span class="pet-breed">Golden Retriever</span><br/>
-            <strong>Date</strong>: <span class="pet-age">3</span><br/>
-            <strong>Location</strong>: <span class="pet-location">Warren, MI</span><br/><br/>
-            <button class="btn btn-default btn-adopt" type="button" data-id="0">BID</button>
+            
+            <strong>Bid-Price</strong>: <span class="bid-price">Golden Retriever</span><br/>
+            <strong>Location</strong>: <span class="bid-location">Warren, MI</span><br/><br/>
+            <div class="column column-33">
+                <label>Ad url</label>
+                <input type="text" id="adurl" placeholder="http://">
+      
+            </div>
+            <button id="makeBid" class="btn btn-default btn-adopt" type="button" data-id="0">BID</button>
+            <script type="text/javascript">
+              // var eth = new Eth(TestRPC.provider());
+              var el = function(id){ return document.querySelector(id); };
+        
+                        el('#makeBid').addEventListener('click', function(){
+        
+                                var a=  el('#adurl').value
+                                console.log(a)
+                                document.getElementsByTagName('img')[0].setAttribute('src',a)
+                                
+                        });
+        
+            </script>
+            
           </div>
         </div>
       </div>
     </div>
+   
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
