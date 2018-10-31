@@ -11,9 +11,9 @@ App = {
       for (i = 0; i < data.length; i ++) {
         petTemplate.find('.panel-title').text(data[i].bidder);
         petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].bidValue);
-        petTemplate.find('.pet-age').text(data[i].date);
-        petTemplate.find('.pet-location').text(data[i].location);
+        petTemplate.find('.bid-account').text(data[i].account);
+        petTemplate.find('.bid-price').text(data[i].bidPrice);
+        petTemplate.find('.bid-location').text(data[i].location);
         petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
 
         petsRow.append(petTemplate.html());
@@ -35,6 +35,7 @@ App = {
     return App.initContract();
   },
 
+  
   initContract: function() {
     $.getJSON('Adoption.json', function(data) {
     // Get the necessary contract artifact file and instantiate it with truffle-contract
@@ -56,9 +57,7 @@ App = {
   },
 
   markAdopted: function(adopters, account) {
-    /*
-     * Replace me...
-     */
+
     var adoptionInstance;
 
     App.contracts.Adoption.deployed().then(function(instance) {
@@ -81,9 +80,6 @@ App = {
 
     var petId = parseInt($(event.target).data('id'));
 
-    /*
-     * Replace me...
-     */
     var adoptionInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
